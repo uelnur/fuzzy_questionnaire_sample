@@ -1,0 +1,19 @@
+parameters:
+imports:
+    - { resource: 'services/' }
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+
+    App\View\:
+        resource: '../src/View'
+        tags: ['controller.service_arguments']
+
+    DataFixtures\:
+        resource: '../fixtures'

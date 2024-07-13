@@ -1,0 +1,8 @@
+{% extends 'questionnaire/errors/_layout.html.twig' %}
+
+{% block main %}
+
+    <a href="{{ path('homepage') }}">На главную страницу</a >
+    <h1>Сессия еще не завершена</h1>
+    <a href="{{ path('session_page', {'sessionID': sessionID}) }}" class="btn btn-primary" >Перейти к ответам</a >
+{% endblock %}

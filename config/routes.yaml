@@ -1,0 +1,5 @@
+view:
+    resource:
+        path: ../src/View/
+        namespace: App\View
+    type: attribute

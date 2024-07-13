@@ -1,0 +1,62 @@
+{% extends 'questionnaire/_layout.html.twig' %}
+
+{% block main %}
+    <h1>Система тестирования с нечеткой логикой</h1>
+    {{ form(form) }}
+
+    {% if activeSessions|length %}
+    <h2>Активные сессии</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Время начала</th>
+            <th>Всего вопросов</th>
+            <th>Пройденных вопросов</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for session in activeSessions %}
+            <tr>
+                <td>{{ session.createdAt|date }}</td>
+                <td>{{ session.totalQuestions }}</td>
+                <td>{{ session.correctAnswers + session.incorrectAnswers }}</td>
+                <td>
+                    <a href="{{ path('session_page', {'sessionID': session.sessionID}) }}" >Продолжить</a >
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% if finishedSessions|length %}
+    <h2>Завершенные сессии</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Время начала</th>
+            <th>Время завершения</th>
+            <th>Всего вопросов</th>
+            <th>Правильных ответов</th>
+            <th>Неправильных ответов</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for session in finishedSessions %}
+            <tr>
+                <td>{{ session.createdAt|date }}</td>
+                <td>{{ session.finishedAt|date }}</td>
+                <td>{{ session.totalQuestions }}</td>
+                <td>{{ session.correctAnswers }}</td>
+                <td>{{ session.incorrectAnswers }}</td>
+                <td>
+                <a href="{{ path('session_result_page', {'sessionID': session.sessionID}) }}" >Посмотреть результаты</a >
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'questionnaire/_layout.html.twig' %}
+
+{% block title %}Результаты ответов{% endblock %}
+
+{% block main %}
+
+    <a href="{{ path('homepage') }}">На главную страницу</a >
+    <h1>Результаты</h1>
+    <div class="row">
+        <div class="col">
+        {% set correctQuestions = result.correctQuestions|filter((q)=>q) %}
+        {% set incorrectQuestions = result.correctQuestions|filter((q)=>not q) %}
+    <h2>Правильные ответы ({{ correctQuestions|length }})</h2>
+    {% for questionID, correct in correctQuestions %}
+        {% set question = result.questions[questionID] %}
+        <h3>{{ question }}</h3>
+        {% for answerID, answer in result.answers[questionID] %}
+            {% set selected = result.selectedAnswers[questionID][answerID] %}
+            {% set correct = result.correctAnswers[questionID][answerID] %}
+            <h4 style="{% if correct %}font-weight:bold;color: darkgreen; {% endif %} {% if selected and not correct %}color: darkred; font-weight:bold;{% endif %}">
+                {{ selected ? include('icons/check-square.svg') : include('icons/square.svg') }}
+                {{ answer }}
+            </h4>
+        {% endfor %}
+        <hr >
+    {% endfor %}
+        </div>
+        <div class="col">
+
+    <h2>Неправильные ответы ({{ incorrectQuestions|length }})</h2>
+    {% for questionID, correct in incorrectQuestions %}
+        {% set question = result.questions[questionID] %}
+        <h3>{{ question }}</h3>
+        {% for answerID, answer in result.answers[questionID] %}
+            {% set selected = result.selectedAnswers[questionID][answerID] %}
+            {% set correct = result.correctAnswers[questionID][answerID] %}
+            <h4 style="{% if correct %}font-weight:bold;color: darkgreen; {% endif %} {% if selected and not correct %}color: darkred; font-weight:bold;{% endif %}">
+                {{ selected ? include('icons/check-square.svg') : include('icons/square.svg') }}
+                {{ answer }}
+            </h4>
+        {% endfor %}
+        <hr >
+    {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

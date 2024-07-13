@@ -1,0 +1,8 @@
+services:
+    App\Domain\Questionnaire\QuestionnaireRepositoryInterface: '@App\Infrastructure\Questionnaire\QuestionnaireRepository'
+    App\Domain\Questionnaire\Usecase\StartSession\StartSessionUsecase:
+        arguments: ~
+        public: true
+
+    App\Domain\Questionnaire\SessionRepositoryInterface: '@App\Infrastructure\Questionnaire\SessionRepository'
+    App\Domain\Questionnaire\ArrayShufflerInterface: '@App\Domain\Questionnaire\ArrayShuffler\PhpArrayShuffler'

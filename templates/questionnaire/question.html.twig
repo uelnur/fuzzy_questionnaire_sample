@@ -1,0 +1,10 @@
+{% extends 'questionnaire/_layout.html.twig' %}
+
+{% block main %}
+    <a href="{{ path('homepage') }}">На главную страницу</a >
+    <p>Вопрос {{ questionNumber+1 }} из {{ questionsCount }}</p>
+    <h2>{{ question }}</h2>
+    {{ form(form) }}
+{% endblock %}
+
+{% block title %}Вопрос {{ questionNumber+1 }} из {{ questionsCount }}{% endblock %}
