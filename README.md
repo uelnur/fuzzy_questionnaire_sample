@@ -34,9 +34,16 @@ php bin/console doctrine:migrations:migrate -n
 
 ```shell
 php bin/console doctrine:fixtures:load -n
+exit
 ```
 
 Проект будет доступен по адресу: `http://localhost:11001/`
+
+## Удаление контейнеров
+
+```shell
+make down
+```
 
 ## Условия задания
 
