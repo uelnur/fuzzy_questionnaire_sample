@@ -76,10 +76,3 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
-
-deploy:
-	git checkout master
-	git merge dev --no-ff --no-edit
-	git checkout dev
-	git push origin master
-	ssh root@kazuni.kz -p 2222 "cd /home/elnur/www/kcp.wer.kz/ && ./update_code.sh"
