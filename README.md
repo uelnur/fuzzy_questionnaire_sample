@@ -5,9 +5,9 @@
 Клонируем репозиторий:
 
 ```shell
-git clone https://github.com/uelnur/questionnaire-test.git questionnaire-test
+git clone https://github.com/uelnur/fuzzy_questionnaire_sample.git fuzzy_questionnaire_sample
 
-cd questionnaire-test
+cd fuzzy_questionnaire_sample
 ```
 
 В системе должен быть установлен `Docker` и `make`.
