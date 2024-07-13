@@ -1,6 +1,6 @@
 services:
     nginx:
-        container_name: textmagic_nginx
+        container_name: questionnaire_nginx
         image: nginx:latest
         volumes:
             - ./public:/app/public
@@ -11,7 +11,7 @@ services:
             - 11001:80
         restart: unless-stopped
     php:
-        container_name: textmagic_php
+        container_name: questionnaire_php
         build:
             dockerfile: docker/php/Dockerfile
             context: .
@@ -20,7 +20,7 @@ services:
         volumes:
             - ./fs:/app/fs
         environment:
-            DATABASE_URL: pgsql://textmagic:gfhjkm@db/textmagic?serverVersion=13&charset=utf8
+            DATABASE_URL: pgsql://questionnaire:gfhjkm@db/questionnaire?serverVersion=13&charset=utf8
             REDIS_URL: redis://redis
             REDIS_URL_SESSION: redis://redis
             REDIS_URL_DOCTRINE: redis://redis
@@ -38,22 +38,22 @@ services:
         image: postgres:13
         ports:
             - '11002:5432'
-        container_name: textmagic_pgsql
+        container_name: questionnaire_pgsql
         restart: unless-stopped
         environment:
-            POSTGRES_DB: 'textmagic'
-            POSTGRES_USER: 'textmagic'
+            POSTGRES_DB: 'questionnaire'
+            POSTGRES_USER: 'questionnaire'
             POSTGRES_PASSWORD: 'gfhjkm'
         volumes:
             - pgdata:/var/lib/postgresql/data:rw
         healthcheck:
-            test: pg_isready -d textmagic -U textmagic
+            test: pg_isready -d questionnaire -U questionnaire
             interval: 10s
             timeout: 3s
             retries: 3
     redis:
         image: redis:7.2.0
-        container_name: textmagic_redis
+        container_name: questionnaire_redis
         restart: unless-stopped
         ports:
             - 11004:6379

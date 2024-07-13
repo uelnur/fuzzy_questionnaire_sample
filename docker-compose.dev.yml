@@ -1,6 +1,6 @@
 services:
     php:
-        container_name: textmagic_php_dev
+        container_name: questionnaire_php_dev
         build:
             target: app_php_dev
         volumes:
@@ -25,8 +25,8 @@ services:
             - ./docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
         environment:
             XDEBUG_MODE: "${XDEBUG_MODE:-off}"
-            TEST_DATABASE_URL: pgsql://textmagic:gfhjkm@db_test/textmagic?serverVersion=13&charset=utf8
-            TEST_ELASTICSEARCH_INDEX_PREFIX: test_textmagic_
+            TEST_DATABASE_URL: pgsql://questionnaire:gfhjkm@db_test/questionnaire?serverVersion=13&charset=utf8
+            TEST_ELASTICSEARCH_INDEX_PREFIX: test_questionnaire_
         extra_hosts:
             - host.docker.internal:host-gateway
     db:
@@ -36,16 +36,16 @@ services:
         image: postgres:13
         ports:
             - '11009:5432'
-        container_name: textmagic_pgsql_test
+        container_name: questionnaire_pgsql_test
         restart: unless-stopped
         environment:
-            POSTGRES_DB: 'textmagic'
-            POSTGRES_USER: 'textmagic'
+            POSTGRES_DB: 'questionnaire'
+            POSTGRES_USER: 'questionnaire'
             POSTGRES_PASSWORD: 'gfhjkm'
         volumes:
             - pgdata_test:/var/lib/postgresql/data:rw
         healthcheck:
-            test: pg_isready -d textmagic -U textmagic
+            test: pg_isready -d questionnaire -U questionnaire
             interval: 10s
             timeout: 3s
             retries: 3
