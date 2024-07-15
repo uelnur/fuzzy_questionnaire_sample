@@ -5,9 +5,12 @@ namespace App\Domain\Questionnaire\Entity;
 use App\Domain\Questionnaire\QuestionID;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ReadableCollection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
+use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
@@ -26,10 +29,10 @@ class Question {
     #[Column(type: 'integer')]
     private int $position;
 
-    /** @var Collection<int, Answer> $answers */
-    #[OneToMany(targetEntity: Answer::class, mappedBy: 'question', orphanRemoval: true)]
+    /** @var Collection<int, Answer>&Selectable<int, Answer> $answers */
+    #[OneToMany(targetEntity: Answer::class, mappedBy: 'question', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[OrderBy(['position' => 'ASC'])]
-    private Collection $answers;
+    private Collection&Selectable $answers;
 
     public function __construct(
         QuestionID $id,
@@ -59,15 +62,28 @@ class Question {
     }
 
     /**
-     * @return Collection<int, Answer>
+     * @return ReadableCollection<int, Answer>&Selectable<int, Answer>
      */
-    public function getAnswers(): Collection {
-        return $this->answers;
+    public function getAnswers(): ReadableCollection&Selectable {
+        $criteria = (new Criteria())->orderBy(['position' => Order::Ascending]);
+        return $this->answers->matching($criteria);
     }
 
     public function hasCorrectAnswer(): bool {
-        return (bool)$this->answers->findFirst(function ($k, Answer $answer) {
+        return (bool)$this->answers->findFirst(function (int $k, Answer $answer) {
             return $answer->isCorrect();
         });
+    }
+
+    public function addAnswer(Answer $answer): void {
+        if ( $this->answers->contains($answer)) {
+            return;
+        }
+
+        $this->answers->add($answer);
+    }
+
+    public function equals(Question $question): bool {
+        return $this->getId()->equals($question->getId());
     }
 }

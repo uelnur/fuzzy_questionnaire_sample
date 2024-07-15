@@ -39,12 +39,11 @@ class SessionAnswer {
 
     public function __construct(
         Session  $session,
-        Question $question,
         Answer   $answer,
         int      $position,
     ) {
         $this->session  = $session;
-        $this->question = $question;
+        $this->question = $answer->getQuestion();
         $this->answer   = $answer;
         $this->position = $position;
     }
@@ -64,6 +63,14 @@ class SessionAnswer {
 
     public function getAnswer(): Answer {
         return $this->answer;
+    }
+
+    public function getAnswerText(): string {
+        return $this->answer->getAnswerText();
+    }
+
+    public function isAnswerCorrect(): bool {
+        return $this->answer->isCorrect();
     }
 
     public function getPosition(): int {

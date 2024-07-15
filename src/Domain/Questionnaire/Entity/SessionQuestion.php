@@ -23,7 +23,7 @@ class SessionQuestion {
     private readonly Question $question;
 
     #[Column(type: 'integer')]
-    private readonly int $position;
+    private int $position;
 
     #[Column(type: 'boolean')]
     private bool $answered;
@@ -31,19 +31,14 @@ class SessionQuestion {
     #[Column(type: 'boolean')]
     private bool $correct;
 
-    #[Column(type: 'boolean')]
-    private bool $lastQuestion = false;
-
     public function __construct(
         Session  $session,
         Question $question,
         int      $position,
-        bool     $lastQuestion,
     ) {
         $this->session      = $session;
         $this->question     = $question;
         $this->position     = $position;
-        $this->lastQuestion = $lastQuestion;
         $this->answered     = false;
         $this->correct      = false;
     }
@@ -73,7 +68,15 @@ class SessionQuestion {
         $this->correct  = $isCorrect;
     }
 
-    public function isLastQuestion(): bool {
-        return $this->lastQuestion;
+    public function hasQuestionCorrectAnswer(): bool {
+        return $this->getQuestion()->hasCorrectAnswer();
+    }
+
+    public function getQuestionText(): string {
+        return $this->question->getQuestionText();
+    }
+
+    public function equals(SessionQuestion $sessionQuestion): bool {
+        return $this->getSession()->getId()->equals($sessionQuestion->getSession()->getId()) && $this->getQuestion()->getId()->equals($sessionQuestion->getQuestion()->getId());
     }
 }

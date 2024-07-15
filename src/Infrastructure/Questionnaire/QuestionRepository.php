@@ -16,7 +16,7 @@ readonly class QuestionRepository implements QuestionRepositoryInterface {
         return $this->em->getRepository(Question::class)->findAll();
     }
 
-    public function getQuestionByID(int $questionID): ?Question {
+    public function getByQuestionID(int $questionID): ?Question {
         return $this->em->getRepository(Question::class)->findOneBy([
             'id' => $questionID
         ]);

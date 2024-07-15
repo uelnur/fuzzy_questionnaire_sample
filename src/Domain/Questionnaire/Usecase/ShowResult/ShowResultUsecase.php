@@ -33,16 +33,16 @@ readonly class ShowResultUsecase {
         foreach ($sessionQuestions as $sessionQuestion) {
             $questionPosition = $sessionQuestion->getPosition();
 
-            $questions[$questionPosition] = $sessionQuestion->getQuestion()->getQuestionText();
+            $questions[$questionPosition] = $sessionQuestion->getQuestionText();
             $correctQuestions[$questionPosition] = $sessionQuestion->isCorrect();
 
-            $sessionAnswers = $session->getAnswers($sessionQuestion->getQuestion()->getId());
+            $sessionAnswers = $session->getAnswers($sessionQuestion->getQuestion());
 
             foreach ($sessionAnswers as $sessionAnswer) {
                 $answerPosition = $sessionAnswer->getPosition();
-                $answers[$questionPosition][$answerPosition] = $sessionAnswer->getAnswer()->getAnswerText();
+                $answers[$questionPosition][$answerPosition] = $sessionAnswer->getAnswerText();
                 $selectedAnswers[$questionPosition][$answerPosition] = $sessionAnswer->isSelected();
-                $correctAnswers[$questionPosition][$answerPosition] = $sessionAnswer->getAnswer()->isCorrect();
+                $correctAnswers[$questionPosition][$answerPosition] = $sessionAnswer->isAnswerCorrect();
             }
         }
 

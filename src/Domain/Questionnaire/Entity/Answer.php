@@ -5,7 +5,6 @@ namespace App\Domain\Questionnaire\Entity;
 use App\Domain\Questionnaire\AnswerID;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -67,5 +66,13 @@ class Answer {
 
     public function getQuestion(): Question {
         return $this->question;
+    }
+
+    public function getPosition(): int {
+        return $this->position;
+    }
+
+    public function equals(Answer $answer): bool {
+        return $this->getId()->equals($answer->getId()) && $this->question->equals($answer->getQuestion());
     }
 }

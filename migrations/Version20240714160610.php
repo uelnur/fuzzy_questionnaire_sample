@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240713140820 extends AbstractMigration
+final class Version20240714160610 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,7 +28,7 @@ final class Version20240713140820 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_B5B6407C613FECDF ON session_answer (session_id)');
         $this->addSql('CREATE INDEX IDX_B5B6407C1E27F6BF ON session_answer (question_id)');
         $this->addSql('CREATE INDEX IDX_B5B6407CAA334807 ON session_answer (answer_id)');
-        $this->addSql('CREATE TABLE session_question (position INT NOT NULL, answered BOOLEAN NOT NULL, correct BOOLEAN NOT NULL, last_question BOOLEAN NOT NULL, session_id UUID NOT NULL, question_id UUID NOT NULL, PRIMARY KEY(session_id, question_id))');
+        $this->addSql('CREATE TABLE session_question (position INT NOT NULL, answered BOOLEAN NOT NULL, correct BOOLEAN NOT NULL, session_id UUID NOT NULL, question_id UUID NOT NULL, PRIMARY KEY(session_id, question_id))');
         $this->addSql('CREATE INDEX IDX_3D5B2926613FECDF ON session_question (session_id)');
         $this->addSql('CREATE INDEX IDX_3D5B29261E27F6BF ON session_question (question_id)');
         $this->addSql('ALTER TABLE answer ADD CONSTRAINT FK_DADD4A251E27F6BF FOREIGN KEY (question_id) REFERENCES question (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');

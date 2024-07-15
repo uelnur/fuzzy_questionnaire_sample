@@ -9,28 +9,27 @@ use App\Domain\Questionnaire\SessionID;
 
 readonly class GetNextQuestionUsecase {
     public function __construct(
-        private SessionRepositoryInterface  $sessionRepo,
+        private SessionRepositoryInterface $sessionRepo,
     ) {}
 
     public function getNextQuestion(SessionID $sessionID): GetNextQuestionResponse {
         $session = $this->sessionRepo->getBySessionID($sessionID);
 
-        if ( !$session ) {
+        if (!$session) {
             throw new SessionNotFoundError($sessionID);
         }
 
-        if ( $session->isFinished() ) {
+        if ($session->isFinished()) {
             throw new SessionAlreadyFinishedError($sessionID);
         }
 
         $sessionQuestion = $session->getNextQuestion();
 
-        if ( !$sessionQuestion ) {
+        if (!$sessionQuestion) {
             throw new SessionAlreadyFinishedError($sessionID);
         }
 
-        $question = $sessionQuestion->getQuestion();
-        $sessionAnswers = $session->getAnswers($question->getId());
+        $sessionAnswers = $session->getAnswers($sessionQuestion->getQuestion());
 
         $options = [];
 
@@ -40,8 +39,8 @@ readonly class GetNextQuestionUsecase {
 
         return new GetNextQuestionResponse(
             $sessionQuestion->getPosition(),
-            $question->getQuestionText(),
-            $sessionQuestion->isLastQuestion(),
+            $sessionQuestion->getQuestionText(),
+            $session->isLastQuestion($sessionQuestion),
             $options,
             $session->getQuestions()->count(),
         );

@@ -9,14 +9,14 @@ use App\Domain\Questionnaire\Entity\SessionAnswer;
 use App\Domain\Questionnaire\Entity\SessionQuestion;
 use App\Domain\Questionnaire\Error\EmptyQuestionsDomainError;
 use App\Domain\Questionnaire\Repository\QuestionRepositoryInterface;
+use App\Domain\Questionnaire\Repository\SessionRepositoryInterface;
 use App\Domain\Questionnaire\SessionID;
-use Doctrine\ORM\EntityManagerInterface;
 
 readonly class StartSessionUsecase {
     public function __construct(
         private QuestionRepositoryInterface $questionRepository,
-        private EntityManagerInterface  $em,
-        private ArrayShufflerInterface  $shuffler,
+        private ArrayShufflerInterface      $shuffler,
+        private SessionRepositoryInterface  $sessionRepository,
     ) {}
 
     public function start(): SessionID {
@@ -26,25 +26,21 @@ readonly class StartSessionUsecase {
             throw new EmptyQuestionsDomainError();
         }
 
-        $session = new Session(new SessionID(), count($questions));
+        $session = new Session(new SessionID());
         $shuffledQuestions = $this->shuffler->shuffle($questions);
 
-        foreach ($shuffledQuestions as $p => $question) {
+        foreach ($shuffledQuestions as $question) {
             assert($question instanceof Question);
 
-            $sessionQuestion = new SessionQuestion($session, $question, $p, count($shuffledQuestions)-1 === $p);
-            $this->em->persist($sessionQuestion);
-
+            $session->addSessionQuestion($question);
             $shuffledAnswers = $this->shuffler->shuffle($question->getAnswers()->toArray());
 
-            foreach ($shuffledAnswers as $k => $answer) {
-                $sessionAnswer = new SessionAnswer($session, $question, $answer, $k);
-                $this->em->persist($sessionAnswer);
+            foreach ($shuffledAnswers as $answer) {
+                $session->addSessionAnswer($answer);
             }
         }
 
-        $this->em->persist($session);
-        $this->em->flush();
+        $this->sessionRepository->save($session);
 
         return $session->getId();
     }
